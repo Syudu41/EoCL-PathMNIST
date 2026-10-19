@@ -1,10 +1,13 @@
 # EoCL-PathMNIST
 This is a replication of EoCL on the PathMNIST dataset. 
 
-Dataset: PathMNIST
+Dataset:
 
-- Download here: PathMNIST
+[!NOTE] Refer to [MedMNIST dataset](https://medmnist.com/).
 
+```python 
+pip install medmnist
+```
 
 Workflow (See fig below)
 
