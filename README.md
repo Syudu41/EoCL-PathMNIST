@@ -6,3 +6,6 @@ Dataset: PathMNIST
 - Download here: PathMNIST
 
 
+Workflow (See fig below)
+
+- Image goes here
