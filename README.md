@@ -2,7 +2,7 @@
 This is a replication of EoCL on the PathMNIST dataset. 
 
 > [!IMPORTANT]
-# > Under Construction!!
+> Under Construction!!
 
 ### Dataset:
 
