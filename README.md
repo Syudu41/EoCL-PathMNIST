@@ -11,6 +11,11 @@ This is a replication of EoCL on the PathMNIST dataset.
 
 ```python 
 pip install medmnist
+```
+
+#### Usage Example
+
+```python
 # To use the standard 28-size (MNIST-like) version utilizing the downloaded files:
 from medmnist import PathMNIST
 train_dataset = PathMNIST(split="train")
