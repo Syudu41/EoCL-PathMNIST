@@ -113,6 +113,8 @@ Per class means the `y_given` routing bucket. Positive class = poisoned (`is_poi
 ---
 
 ## 10. Next steps
+**Prototype status (2026-10-22): Steps 1–5 implemented and run with seed 42.** Entry point: `run_prototype.py`; separate data prep, poisoning, partitioning, training, and evaluation modules. Results are printed and saved to `results/results.csv`; exact flip counts, routing-bucket counts, and all 108 member parameter records are saved alongside it. All three four-column splits are saved as pandas pickle files. Four implementation checks passed. Step 6 and all Deferred items remain unimplemented.
+
 1. Data prep: load PathMNIST 28×28, carve 40k pool, split 30/5/5, build columns.
 2. Label-flip poisoning (20% per class).
 3. Grouping + hash partitioning.
