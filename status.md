@@ -50,6 +50,8 @@ flowchart TD
 | Columns | `image`, `y_true`, `y_given`, `is_poisoned` |
 | Poisoning | Applied to train, val and test |
 
+**Reproducibility:** one global seed (42). Pool sampling and label flips use one seeded NumPy stream, with flips applied in train/val/test order. Stratified splits and stochastic estimators use the same seed. Scale pixels to [0,1]. Save all splits with the four columns above; validation receives label flips but is excluded from fitting, scaler fitting, tuning, and metrics.
+
 ---
 
 ## 5. Attacks
@@ -62,6 +64,8 @@ flowchart TD
 | `is_poisoned` | `y_given != y_true` | Recorded when the shift is applied |
 | Lands in bucket of | The **fake** label | Its **own** class |
 | Member must learn | "This image isn't tissue j" | "This tissue-j image was tampered with" |
+
+For label flips, select floor(0.20 × class count) samples independently within each true class of each split. Log the exact flipped count per class and split.
 
 **Mean-shift magnitude (my definition — paper does not specify):** shift = k × std of per-image mean brightness within class j. Keep k small enough that shifted and clean images overlap; if detection is ~100% at every k, the shift is too large (a single brightness threshold would solve it).
 
@@ -78,6 +82,12 @@ flowchart TD
 
 → 4 runs per attack.
 
+**Fixed prototype settings (no tuning or hyperparameter sampling):**
+- Both families: `class_weight="balanced"`.
+- SVM: RBF kernel, `gamma="scale"`, C = [0.1, 1, 3, 10, 30]. For m=1 use C=1. Fit `StandardScaler` on each member's own training partition only.
+- RF: `max_features="sqrt"`; (n_estimators, max_depth) = [(100, None), (200, None), (100, 20), (200, 20), (300, 30)]. For m=1 use (100, None).
+- For m=5, member i uses entry i in list order. Log every member's parameters.
+
 ## 7. Metrics
 Computed on the 5k EoCl test set, comparing accept/reject against `is_poisoned`:
 - Detection accuracy
@@ -85,6 +95,8 @@ Computed on the 5k EoCl test set, comparing accept/reject against `is_poisoned`:
 - Recall
 
 Report per run (m × classifier), overall and per class.
+
+Per class means the `y_given` routing bucket. Positive class = poisoned (`is_poisoned=1`); rejection is a positive prediction. Use `zero_division=0` for precision/recall. Log poisoned/pristine counts for every bucket in train/val/test so zero metrics are interpretable.
 
 ---
 
@@ -95,6 +107,8 @@ Report per run (m × classifier), overall and per class.
 
 ## 9. Deferred (not in prototype)
 224×224 embeddings · harm check · AUROC · diversity metrics · single-ensemble ablation · poison-rate sweep · m = 3 · Stage 2 (FL) · Stage 3 (server-side update analysis)
+
+**Related work to revisit:** FedGF — flagged by the project author as potentially overlapping with this replication and planned extension, at least partially. Confirm the exact paper and assess the overlap later; reference only, outside the prototype scope.
 
 ---
 
